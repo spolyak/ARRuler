@@ -29,22 +29,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         measurementLabel.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100)
         
         // Makes the background white
-        measurementLabel.backgroundColor = .white
+        measurementLabel.backgroundColor = .systemPink
         
         // Sets some default text
-        measurementLabel.text = "0 inches"
+        measurementLabel.text = "Clinical ink - Skin Measurement: 0 inches"
         
         // Centers the text
         measurementLabel.textAlignment = .center
         
+        let imgView = UIImageView()
+        imgView.frame = CGRect(x: 50, y: 100, width: 50, height: 50)
+        imgView.image = UIImage(named: "ci-logo")//Assign image to ImageView
+        view.addSubview(imgView)
+        
         // Adds the text to the
         view.addSubview(measurementLabel)
+
         
         // Set the view's delegate
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
                         
         // Creates a tap handler and then sets it to a constant
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -82,7 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             // Adds a second sphere to the array
             spheres.append(sphere)
-            measurementLabel.text = "\(sphere.distance(to: first)) inches"
+            measurementLabel.text = "Clinical ink - Skin Measurement: \(sphere.distance(to: first)) inches"
             
             // If more that two are present...
             if spheres.count > 2 {
@@ -116,7 +122,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func newSphere(at position: SCNVector3) -> SCNNode {
         
         // Creates an SCNSphere with a radius of 0.4
-        let sphere = SCNSphere(radius: 0.01)
+        let sphere = SCNSphere(radius: 0.001)
         
         // Converts the sphere into an SCNNode
         let node = SCNNode(geometry: sphere)
@@ -128,7 +134,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let material = SCNMaterial()
         
         // Converts the contents of the PNG file into the material
-        material.diffuse.contents = UIColor.orange
+        material.diffuse.contents = UIColor.systemBlue
         
         // Creates realistic shadows around the sphere
         material.lightingModel = .blinn
@@ -181,10 +187,7 @@ extension SCNNode {
         let meters = sqrt(dx*dx + dy*dy + dz*dz)
         
         // Returns inches
-        return CGFloat(meters * inches)
+        return round(CGFloat(meters * inches) * 100) / 100
     }
 }
-
-
-
 
